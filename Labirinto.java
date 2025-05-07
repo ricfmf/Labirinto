@@ -1,10 +1,7 @@
 package com.mycompany.projeto2gq;
 
-/**
- *
- * @author ricar
- */
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Labirinto {
     private ArrayList<ArrayList<String>> estrutura;
@@ -28,6 +25,40 @@ public class Labirinto {
         }
     }
 
+    public boolean posicaoValida(int[] posicao) {
+        int linha = posicao[0];
+        int coluna = posicao[1];
+        return linha >= 0 && linha < estrutura.size()
+            && coluna >= 0 && coluna < estrutura.get(0).size();
+    }
+
+    public Tesouro getTesouroNaPosicao(int[] posicao) {
+        for (Tesouro t : tesouros) {
+            if (Arrays.equals(t.getLocalizacao(), posicao)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public Perigo getPerigoNaPosicao(int[] posicao) {
+        for (Perigo p : perigos) {
+            if (Arrays.equals(p.getLocalizacao(), posicao)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public void exibirLabirinto() {
+        for (ArrayList<String> linha : estrutura) {
+            for (String celula : linha) {
+                System.out.print(celula + " ");
+            }
+            System.out.println();
+        }
+    }
+
     public void adicionarTesouro(Tesouro t) {
         tesouros.add(t);
     }
@@ -44,13 +75,15 @@ public class Labirinto {
         perigos.remove(p);
     }
 
-    public ArrayList<ArrayList<String>> getEstrutura() { 
-        return estrutura; 
+    public ArrayList<ArrayList<String>> getEstrutura() {
+        return estrutura;
     }
-    public ArrayList<Tesouro> getTesouros() { 
-        return tesouros; 
+
+    public ArrayList<Tesouro> getTesouros() {
+        return tesouros;
     }
-    public ArrayList<Perigo> getPerigos() { 
-        return perigos; 
+
+    public ArrayList<Perigo> getPerigos() {
+        return perigos;
     }
 }
