@@ -1,11 +1,4 @@
-package com.mycompany.projeto2gq;
-
-/**
- *
- * @author ricar
- */
-
-public class Tesouro {
+public abstract class Tesouro {
     private String nome;
     private int[] localizacao;
     private int valor;
@@ -37,7 +30,27 @@ public class Tesouro {
         this.valor = valor; 
     }
 
+    public abstract void efeito();
+}
+
+public class TesouroOuro extends Tesouro {
+    public TesouroOuro(String nome, int[] localizacao, int valor) {
+        super(nome, localizacao, valor);
+    }
+
+    @Override
     public void efeito() {
-        System.out.println("Tesouro coletado! Pontos: " + valor);
+        System.out.println("Ouro coletado! +" + getValor() + " pontos");
+    }
+}
+
+public class TesouroGema extends Tesouro {
+    public TesouroGema(String nome, int[] localizacao, int valor) {
+        super(nome, localizacao, valor * 2); // Gemas valem o dobro
+    }
+
+    @Override
+    public void efeito() {
+        System.out.println("Gema preciosa coletada! +" + getValor() + " pontos");
     }
 }
