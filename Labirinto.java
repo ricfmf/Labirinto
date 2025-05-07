@@ -1,89 +1,76 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.mycompany.projeto2gq;
 
-import java.util.ArrayList;
+/**
+ *
+ * @author ricar
+ */
+
 import java.util.Arrays;
 
-public class Labirinto {
-    private ArrayList<ArrayList<String>> estrutura;
-    private ArrayList<Tesouro> tesouros;
-    private ArrayList<Perigo> perigos;
+public abstract class Tesouro {
+    private String nome;
+    private int[] localizacao;
+    private int valor;
 
-    public Labirinto() {
-        this.estrutura = new ArrayList<>();
-        this.tesouros = new ArrayList<>();
-        this.perigos = new ArrayList<>();
+    public Tesouro(String nome, int[] localizacao, int valor) {
+        this.nome = nome;
+        this.localizacao = localizacao;
+        this.valor = valor;
     }
 
-    public void gerarLabirinto(int linhas, int colunas) {
-        estrutura.clear();
-        for (int i = 0; i < linhas; i++) {
-            ArrayList<String> linha = new ArrayList<>();
-            for (int j = 0; j < colunas; j++) {
-                linha.add(".");
-            }
-            estrutura.add(linha);
-        }
+    public String getNome() {
+        return nome;
     }
 
-    public boolean posicaoValida(int[] posicao) {
-        int linha = posicao[0];
-        int coluna = posicao[1];
-        return linha >= 0 && linha < estrutura.size()
-            && coluna >= 0 && coluna < estrutura.get(0).size();
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public Tesouro getTesouroNaPosicao(int[] posicao) {
-        for (Tesouro t : tesouros) {
-            if (Arrays.equals(t.getLocalizacao(), posicao)) {
-                return t;
-            }
-        }
-        return null;
+    public int[] getLocalizacao() {
+        return localizacao;
     }
 
-    public Perigo getPerigoNaPosicao(int[] posicao) {
-        for (Perigo p : perigos) {
-            if (Arrays.equals(p.getLocalizacao(), posicao)) {
-                return p;
-            }
-        }
-        return null;
+    public void setLocalizacao(int[] localizacao) {
+        this.localizacao = localizacao;
     }
 
-    public void exibirLabirinto() {
-        for (ArrayList<String> linha : estrutura) {
-            for (String celula : linha) {
-                System.out.print(celula + " ");
-            }
-            System.out.println();
-        }
+    public int getValor() {
+        return valor;
     }
 
-    public void adicionarTesouro(Tesouro t) {
-        tesouros.add(t);
+    public void setValor(int valor) {
+        this.valor = valor;
     }
 
-    public void removerTesouro(Tesouro t) {
-        tesouros.remove(t);
+    public boolean estaNaPosicao(int[] posicao) {
+        return Arrays.equals(this.localizacao, posicao);
     }
 
-    public void adicionarPerigo(Perigo p) {
-        perigos.add(p);
+    public abstract void efeito();
+}
+
+class TesouroOuro extends Tesouro {
+    public TesouroOuro(String nome, int[] localizacao, int valor) {
+        super(nome, localizacao, valor);
     }
 
-    public void removerPerigo(Perigo p) {
-        perigos.remove(p);
+    @Override
+    public void efeito() {
+        System.out.println("Ouro coletado! +" + getValor() + " pontos");
+    }
+}
+
+class TesouroGema extends Tesouro {
+    public TesouroGema(String nome, int[] localizacao, int valorBase) {
+        super(nome, localizacao, valorBase * 2); // Gema vale o dobro
     }
 
-    public ArrayList<ArrayList<String>> getEstrutura() {
-        return estrutura;
-    }
-
-    public ArrayList<Tesouro> getTesouros() {
-        return tesouros;
-    }
-
-    public ArrayList<Perigo> getPerigos() {
-        return perigos;
+    @Override
+    public void efeito() {
+        System.out.println("Gema preciosa coletada! +" + getValor() + " pontos");
     }
 }
