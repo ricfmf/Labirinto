@@ -8,69 +8,90 @@ package com.mycompany.projeto2gq;
  *
  * @author ricar
  */
-
+import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class Tesouro {
-    private String nome;
-    private int[] localizacao;
-    private int valor;
+public class Labirinto {
+    private ArrayList<ArrayList<String>> estrutura;
+    private ArrayList<Tesouro> tesouros;
+    private ArrayList<Perigo> perigos;
 
-    public Tesouro(String nome, int[] localizacao, int valor) {
-        this.nome = nome;
-        this.localizacao = localizacao;
-        this.valor = valor;
+    public Labirinto() {
+        this.estrutura = new ArrayList<>();
+        this.tesouros = new ArrayList<>();
+        this.perigos = new ArrayList<>();
     }
 
-    public String getNome() {
-        return nome;
+    public void gerarLabirinto(int linhas, int colunas) {
+        estrutura.clear();
+        for (int i = 0; i < linhas; i++) {
+            ArrayList<String> linha = new ArrayList<>();
+            for (int j = 0; j < colunas; j++) {
+                linha.add(".");
+            }
+            estrutura.add(linha);
+        }
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public boolean posicaoValida(int[] posicao) {
+        int linha = posicao[0];
+        int coluna = posicao[1];
+        return linha >= 0 && linha < estrutura.size()
+            && coluna >= 0 && coluna < estrutura.get(0).size();
     }
 
-    public int[] getLocalizacao() {
-        return localizacao;
+    public Tesouro getTesouroNaPosicao(int[] posicao) {
+        for (Tesouro t : tesouros) {
+            if (Arrays.equals(t.getLocalizacao(), posicao)) {
+                return t;
+            }
+        }
+        return null;
     }
 
-    public void setLocalizacao(int[] localizacao) {
-        this.localizacao = localizacao;
+    public Perigo getPerigoNaPosicao(int[] posicao) {
+        for (Perigo p : perigos) {
+            if (Arrays.equals(p.getLocalizacao(), posicao)) {
+                return p;
+            }
+        }
+        return null;
     }
 
-    public int getValor() {
-        return valor;
+    public void exibirLabirinto() {
+        for (ArrayList<String> linha : estrutura) {
+            for (String celula : linha) {
+                System.out.print(celula + " ");
+            }
+            System.out.println();
+        }
     }
 
-    public void setValor(int valor) {
-        this.valor = valor;
+    public void adicionarTesouro(Tesouro t) {
+        tesouros.add(t);
     }
 
-    public boolean estaNaPosicao(int[] posicao) {
-        return Arrays.equals(this.localizacao, posicao);
+    public void removerTesouro(Tesouro t) {
+        tesouros.remove(t);
     }
 
-    public abstract void efeito();
-}
-
-class TesouroOuro extends Tesouro {
-    public TesouroOuro(String nome, int[] localizacao, int valor) {
-        super(nome, localizacao, valor);
+    public void adicionarPerigo(Perigo p) {
+        perigos.add(p);
     }
 
-    @Override
-    public void efeito() {
-        System.out.println("Ouro coletado! +" + getValor() + " pontos");
-    }
-}
-
-class TesouroGema extends Tesouro {
-    public TesouroGema(String nome, int[] localizacao, int valorBase) {
-        super(nome, localizacao, valorBase * 2); // Gema vale o dobro
+    public void removerPerigo(Perigo p) {
+        perigos.remove(p);
     }
 
-    @Override
-    public void efeito() {
-        System.out.println("Gema preciosa coletada! +" + getValor() + " pontos");
+    public ArrayList<ArrayList<String>> getEstrutura() {
+        return estrutura;
+    }
+
+    public ArrayList<Tesouro> getTesouros() {
+        return tesouros;
+    }
+
+    public ArrayList<Perigo> getPerigos() {
+        return perigos;
     }
 }
