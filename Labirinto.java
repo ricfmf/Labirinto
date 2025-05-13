@@ -1,16 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.projeto2gq;
 
-/**
- *
- * @author ricar
- */
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Representa a grade digital do sistema, inspirada no universo de Tron.
+ */
 public class Labirinto {
     private ArrayList<ArrayList<String>> estrutura;
     private ArrayList<Tesouro> tesouros;
@@ -22,12 +17,13 @@ public class Labirinto {
         this.perigos = new ArrayList<>();
     }
 
+    // Gera a grade digital com caminhos vazios representados por '░'
     public void gerarLabirinto(int linhas, int colunas) {
         estrutura.clear();
         for (int i = 0; i < linhas; i++) {
             ArrayList<String> linha = new ArrayList<>();
             for (int j = 0; j < colunas; j++) {
-                linha.add(".");
+                linha.add("░"); // Representa espaço livre no sistema
             }
             estrutura.add(linha);
         }
@@ -58,10 +54,18 @@ public class Labirinto {
         return null;
     }
 
+    // Exibe o labirinto com ícones temáticos de Tron
     public void exibirLabirinto() {
-        for (ArrayList<String> linha : estrutura) {
-            for (String celula : linha) {
-                System.out.print(celula + " ");
+        for (int i = 0; i < estrutura.size(); i++) {
+            for (int j = 0; j < estrutura.get(i).size(); j++) {
+                int[] pos = {i, j};
+                if (getTesouroNaPosicao(pos) != null) {
+                    System.out.print("⚡ "); // Fragmento de código (tesouro)
+                } else if (getPerigoNaPosicao(pos) != null) {
+                    System.out.print("☠ "); // Bug ou sentinela (perigo)
+                } else {
+                    System.out.print(estrutura.get(i).get(j) + " ");
+                }
             }
             System.out.println();
         }
