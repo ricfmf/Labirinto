@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Representa a grade digital do sistema, inspirada no universo de Tron.
+ * Representa a grade digital da Rede Tron, onde o jogador navega.
  */
 public class Labirinto {
     private ArrayList<ArrayList<String>> estrutura;
@@ -17,13 +17,13 @@ public class Labirinto {
         this.perigos = new ArrayList<>();
     }
 
-    // Gera a grade digital com caminhos vazios representados por '░'
+    // Gera a grade com espaços vazios representados por '░'
     public void gerarLabirinto(int linhas, int colunas) {
         estrutura.clear();
         for (int i = 0; i < linhas; i++) {
             ArrayList<String> linha = new ArrayList<>();
             for (int j = 0; j < colunas; j++) {
-                linha.add("░"); // Representa espaço livre no sistema
+                linha.add("░"); // Espaço livre no sistema Tron
             }
             estrutura.add(linha);
         }
@@ -54,17 +54,26 @@ public class Labirinto {
         return null;
     }
 
-    // Exibe o labirinto com ícones temáticos de Tron
+    // Exibe a grade do sistema com ícones temáticos
     public void exibirLabirinto() {
         for (int i = 0; i < estrutura.size(); i++) {
             for (int j = 0; j < estrutura.get(i).size(); j++) {
                 int[] pos = {i, j};
                 if (getTesouroNaPosicao(pos) != null) {
-                    System.out.print("⚡ "); // Fragmento de código (tesouro)
-                } else if (getPerigoNaPosicao(pos) != null) {
-                    System.out.print("☠ "); // Bug ou sentinela (perigo)
+                    System.out.print("⚡ "); // Tesouro: Fragmento de código
                 } else {
-                    System.out.print(estrutura.get(i).get(j) + " ");
+                    Perigo perigo = getPerigoNaPosicao(pos);
+                    if (perigo != null) {
+                        if (perigo instanceof BugCorrompido) {
+                            System.out.print("☣ "); // Bug Corrompido
+                        } else if (perigo instanceof SentinelaHostil) {
+                            System.out.print("⛨ "); // Sentinela
+                        } else {
+                            System.out.print("☠ "); // Outro tipo genérico
+                        }
+                    } else {
+                        System.out.print(estrutura.get(i).get(j) + " ");
+                    }
                 }
             }
             System.out.println();
