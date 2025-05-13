@@ -1,16 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.projeto2gq;
-import java.util.ArrayList;
 
-/**
- *
- * @author ricar
- */
+import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Representa o programa/jogador que navega pela Rede Tron.
+ */
 public class Aventureiro {
     private String nome;
     private int[] localizacaoAtual;
@@ -48,9 +43,13 @@ public class Aventureiro {
         return pontos;
     }
 
+    /**
+     * Move o jogador para uma nova posição da grade digital,
+     * e interage com elementos se presentes.
+     */
     public void mover(int[] novaPosicao, Labirinto labirinto) throws IllegalArgumentException {
         if (!labirinto.posicaoValida(novaPosicao)) {
-            throw new IllegalArgumentException("Movimento inválido: posição fora do labirinto.");
+            throw new IllegalArgumentException("⚠ Erro: movimentação fora dos limites do sistema.");
         }
 
         this.localizacaoAtual = novaPosicao;
@@ -66,29 +65,41 @@ public class Aventureiro {
         }
     }
 
+    /**
+     * Coleta um recurso digital (tesouro) na grade.
+     */
     public void coletarTesouro(Tesouro t, Labirinto labirinto) {
         if (!Arrays.equals(t.getLocalizacao(), localizacaoAtual)) {
-            throw new IllegalStateException("Não há tesouro na posição atual do aventureiro.");
+            throw new IllegalStateException("⚠ Nenhum fragmento de código na posição atual.");
         }
 
         tesourosColetados.add(t);
         pontos += t.getValor();
+        System.out.println("✔ Fragmento de código \"" + t.getNome() + "\" coletado! +" + t.getValor() + " pontos.");
         t.efeito();
         labirinto.removerTesouro(t);
     }
 
+    /**
+     * Enfrenta uma ameaça digital presente na posição atual.
+     */
     public void enfrentarPerigo(Perigo p, Labirinto labirinto) {
-        System.out.println("Oh não! Você encontrou um perigo e perdeu " + p.getDano() + " pontos!");
+        System.out.println("\n⛔ ALERTA: Você encontrou " + p.getNome() + "!");
+        System.out.println("→ " + p.getDescricao());
+        System.out.println("→ Integridade comprometida: -" + p.getDano() + " pontos.");
         pontos = Math.max(0, pontos - p.getDano());
         labirinto.removerPerigo(p);
     }
 
+    /**
+     * Exibe os dados do jogador e os fragmentos de código coletados.
+     */
     public void mostrarInventario() {
-        System.out.println("\nInventário de " + nome + ":");
-        System.out.println("Total de pontos: " + pontos);
-        System.out.println("Tesouros coletados:");
+        System.out.println("\n📂 Inventário do programa \"" + nome + "\":");
+        System.out.println("💠 Integridade atual (pontos): " + pontos);
+        System.out.println("📦 Fragmentos de código coletados:");
         for (Tesouro t : tesourosColetados) {
-            System.out.println("- " + t.getNome() + " (" + t.getValor() + " pontos)");
+            System.out.println("  - " + t.getNome() + " [" + t.getValor() + " pts]");
         }
     }
 }
