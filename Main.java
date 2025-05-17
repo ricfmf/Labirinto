@@ -1,110 +1,117 @@
-package com.mycompany.projeto2gq;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
-/**
- * Representa a grade digital da Rede Tron, onde o jogador navega.
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-public class Labirinto {
-    private ArrayList<ArrayList<String>> estrutura;
-    private ArrayList<Tesouro> tesouros;
-    private ArrayList<Perigo> perigos;
 
-    public Labirinto() {
-        this.estrutura = new ArrayList<>();
-        this.tesouros = new ArrayList<>();
-        this.perigos = new ArrayList<>();
-    }
-
-    // Gera a grade com espaços vazios representados por '░'
-    public void gerarLabirinto(int linhas, int colunas) {
-        estrutura.clear();
-        for (int i = 0; i < linhas; i++) {
-            ArrayList<String> linha = new ArrayList<>();
-            for (int j = 0; j < colunas; j++) {
-                linha.add("░"); // Espaço livre no sistema Tron
-            }
-            estrutura.add(linha);
-        }
-    }
-
-    public boolean posicaoValida(int[] posicao) {
-        int linha = posicao[0];
-        int coluna = posicao[1];
-        return linha >= 0 && linha < estrutura.size()
-            && coluna >= 0 && coluna < estrutura.get(0).size();
-    }
-
-    public Tesouro getTesouroNaPosicao(int[] posicao) {
-        for (Tesouro t : tesouros) {
-            if (Arrays.equals(t.getLocalizacao(), posicao)) {
-                return t;
-            }
-        }
-        return null;
-    }
-
-    public Perigo getPerigoNaPosicao(int[] posicao) {
-        for (Perigo p : perigos) {
-            if (Arrays.equals(p.getLocalizacao(), posicao)) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    // Exibe a grade do sistema com ícones temáticos
-    public void exibirLabirinto() {
-        for (int i = 0; i < estrutura.size(); i++) {
-            for (int j = 0; j < estrutura.get(i).size(); j++) {
-                int[] pos = {i, j};
-                if (getTesouroNaPosicao(pos) != null) {
-                    System.out.print("⚡ "); // Tesouro: Fragmento de código
-                } else {
-                    Perigo perigo = getPerigoNaPosicao(pos);
-                    if (perigo != null) {
-                        if (perigo instanceof BugCorrompido) {
-                            System.out.print("☣ "); // Bug Corrompido
-                        } else if (perigo instanceof SentinelaHostil) {
-                            System.out.print("⛨ "); // Sentinela
-                        } else {
-                            System.out.print("☠ "); // Outro tipo genérico
-                        }
-                    } else {
-                        System.out.print(estrutura.get(i).get(j) + " ");
-                    }
+package com.mycompany.projeto2gq;
+import java.util.Scanner;
+/**
+ *
+ * @author ricar
+ */
+public class Projeto2GQ{
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("🌀 Bem-vindo ao SISTEMA TRON!");
+        System.out.println("🔷 Iniciando simulação da Grade Digital...\n");
+        
+        // Criar o labirinto 6x6
+        Labirinto labirinto = new Labirinto();
+        labirinto.gerarLabirinto(6, 6);
+        
+        // Adicionar tesouros
+        labirinto.adicionarTesouro(new TokenDeAcesso(new int[]{1, 2}));
+        labirinto.adicionarTesouro(new AtualizacaoDeSistema(new int[]{3, 3}));
+        labirinto.adicionarTesouro(new FragmentoDeCodigo(new int[]{4, 1}));
+        
+        // Adicionar perigos
+        labirinto.adicionarPerigo(new BugCorrompido(new int[]{2, 2}));
+        labirinto.adicionarPerigo(new SentinelaHostil(new int[]{3, 1}));
+        
+        // Criar jogador na posição [0, 0]
+        Aventureiro jogador = new Aventureiro("ProgramaPrincipal", new int[]{0, 0});
+        
+        boolean jogando = true;
+        while (jogando) {
+            // Limpar a tela (simulado)
+            for (int i = 0; i < 50; i++) System.out.println();
+            
+            // Mostrar status e labirinto
+            System.out.println("=== SISTEMA TRON ===");
+            System.out.println("Jogador: " + jogador.getNome());
+            System.out.println("Posição: [" + jogador.getLocalizacaoAtual()[0] + ", " + jogador.getLocalizacaoAtual()[1] + "]");
+            System.out.println("Pontos: " + jogador.getPontos() + "\n");
+            
+            labirinto.exibirLabirinto();
+            
+            // Mostrar posição do jogador no mapa
+            int[] pos = jogador.getLocalizacaoAtual();
+            System.out.println("\nVocê está aqui: [" + pos[0] + ", " + pos[1] + "]");
+            
+            // Menu de opções
+            System.out.println("\nComandos:");
+            System.out.println("W - Mover para cima");
+            System.out.println("S - Mover para baixo");
+            System.out.println("A - Mover para esquerda");
+            System.out.println("D - Mover para direita");
+            System.out.println("I - Ver inventário");
+            System.out.println("M - Mostrar mapa completo");
+            System.out.println("Q - Sair do jogo");
+            System.out.print("\nDigite seu comando: ");
+            
+            String comando = scanner.nextLine().toUpperCase();
+            
+            try {
+                int[] novaPosicao = jogador.getLocalizacaoAtual().clone();
+                
+                switch (comando) {
+                    case "W":
+                        novaPosicao[0]--;
+                        break;
+                    case "S":
+                        novaPosicao[0]++;
+                        break;
+                    case "A":
+                        novaPosicao[1]--;
+                        break;
+                    case "D":
+                        novaPosicao[1]++;
+                        break;
+                    case "I":
+                        jogador.mostrarInventario();
+                        System.out.println("\nPressione ENTER para continuar...");
+                        scanner.nextLine();
+                        continue;
+                    case "M":
+                        System.out.println("\n=== MAPA COMPLETO ===");
+                        labirinto.exibirLabirinto();
+                        System.out.println("\nPressione ENTER para continuar...");
+                        scanner.nextLine();
+                        continue;
+                    case "Q":
+                        jogando = false;
+                        System.out.println("Saindo do Sistema Tron...");
+                        continue;
+                    default:
+                        System.out.println("Comando inválido! Tente novamente.");
+                        Thread.sleep(1000);
+                        continue;
                 }
+                
+                jogador.mover(novaPosicao, labirinto);
+                
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erro: " + e.getMessage());
+                //Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-            System.out.println();
         }
-    }
-
-    public void adicionarTesouro(Tesouro t) {
-        tesouros.add(t);
-    }
-
-    public void removerTesouro(Tesouro t) {
-        tesouros.remove(t);
-    }
-
-    public void adicionarPerigo(Perigo p) {
-        perigos.add(p);
-    }
-
-    public void removerPerigo(Perigo p) {
-        perigos.remove(p);
-    }
-
-    public ArrayList<ArrayList<String>> getEstrutura() {
-        return estrutura;
-    }
-
-    public ArrayList<Tesouro> getTesouros() {
-        return tesouros;
-    }
-
-    public ArrayList<Perigo> getPerigos() {
-        return perigos;
+        
+        // Fim do jogo
+        System.out.println("\n=== RESULTADO FINAL ===");
+        jogador.mostrarInventario();
+        System.out.println("\n🏁 Fim da simulação. Desconectando da Grade Digital...");
+        scanner.close();
     }
 }
