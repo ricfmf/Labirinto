@@ -4,6 +4,7 @@
 
 package com.mycompany.projeto2gq;
 import java.util.Scanner;
+import java.util.Arrays;
 /**
  *
  * @author ricar
@@ -42,11 +43,8 @@ public class Projeto2GQ{
             System.out.println("Posição: [" + jogador.getLocalizacaoAtual()[0] + ", " + jogador.getLocalizacaoAtual()[1] + "]");
             System.out.println("Pontos: " + jogador.getPontos() + "\n");
             
-            labirinto.exibirLabirinto();
-            
-            // Mostrar posição do jogador no mapa
-            int[] pos = jogador.getLocalizacaoAtual();
-            System.out.println("\nVocê está aqui: [" + pos[0] + ", " + pos[1] + "]");
+            // Exibir labirinto com a posição do jogador marcada
+            exibirLabirintoComJogador(labirinto, jogador);
             
             // Menu de opções
             System.out.println("\nComandos:");
@@ -84,7 +82,7 @@ public class Projeto2GQ{
                         continue;
                     case "M":
                         System.out.println("\n=== MAPA COMPLETO ===");
-                        labirinto.exibirLabirinto();
+                        exibirLabirintoComJogador(labirinto, jogador);
                         System.out.println("\nPressione ENTER para continuar...");
                         scanner.nextLine();
                         continue;
@@ -98,7 +96,36 @@ public class Projeto2GQ{
                         continue;
                 }
                 
+                // Antes de mover, verifique se há tesouros ou perigos na nova posição
+                Tesouro tesouro = labirinto.getTesouroNaPosicao(novaPosicao);
+                Perigo perigo = labirinto.getPerigoNaPosicao(novaPosicao);
+                
+                if (tesouro != null) {
+                    System.out.println("\n🔍 Você avistou um " + tesouro.getNome() + " na próxima posição!");
+                    System.out.print("Deseja se mover para lá? (S/N): ");
+                    String resposta = scanner.nextLine().toUpperCase();
+                    if (!resposta.equals("S")) {
+                        continue;
+                    }
+                } else if (perigo != null) {
+                    System.out.println("\n⚠ ALERTA: Há um " + perigo.getNome() + " na próxima posição!");
+                    System.out.print("Deseja continuar mesmo assim? (S/N): ");
+                    String resposta = scanner.nextLine().toUpperCase();
+                    if (!resposta.equals("S")) {
+                        continue;
+                    }
+                }
+                
                 jogador.mover(novaPosicao, labirinto);
+                
+                // Mostrar mensagem específica se coletou tesouro
+                if (tesouro != null && Arrays.equals(jogador.getLocalizacaoAtual(), novaPosicao)) {
+                    System.out.println("\n✅ " + tesouro.getNome() + " coletado com sucesso!");
+                    System.out.println("Pontos: +" + tesouro.getValor());
+                    tesouro.efeito();
+                    System.out.println("\nPressione ENTER para continuar...");
+                    scanner.nextLine();
+                }
                 
             } catch (IllegalArgumentException e) {
                 System.out.println("Erro: " + e.getMessage());
@@ -113,5 +140,42 @@ public class Projeto2GQ{
         jogador.mostrarInventario();
         System.out.println("\n🏁 Fim da simulação. Desconectando da Grade Digital...");
         scanner.close();
+    }
+    
+    // Método para exibir o labirinto com a posição do jogador marcada
+    private static void exibirLabirintoComJogador(Labirinto labirinto, Aventureiro jogador) {
+        int[] posJogador = jogador.getLocalizacaoAtual();
+        
+        for (int i = 0; i < labirinto.getEstrutura().size(); i++) {
+            for (int j = 0; j < labirinto.getEstrutura().get(i).size(); j++) {
+                int[] pos = {i, j};
+                
+                if (i == posJogador[0] && j == posJogador[1]) {
+                    System.out.print("P "); // Ícone do jogador
+                } else {
+                    Tesouro tesouro = labirinto.getTesouroNaPosicao(pos);
+                    Perigo perigo = labirinto.getPerigoNaPosicao(pos);
+                    
+                    if (tesouro != null) {
+                        if (tesouro instanceof TokenDeAcesso) {
+                            System.out.print("T ");
+                        } else if (tesouro instanceof AtualizacaoDeSistema) {
+                            System.out.print("A ");
+                        } else if (tesouro instanceof FragmentoDeCodigo) {
+                            System.out.print("F ");
+                        }
+                    } else if (perigo != null) {
+                        if (perigo instanceof BugCorrompido) {
+                            System.out.print("B ");
+                        } else if (perigo instanceof SentinelaHostil) {
+                            System.out.print("S ");
+                        }
+                    } else {
+                        System.out.print("░ ");
+                    }
+                }
+            }
+            System.out.println();
+        }
     }
 }
