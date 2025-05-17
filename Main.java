@@ -9,6 +9,7 @@ import java.util.Arrays;
  *
  * @author ricar
  */
+
 public class Projeto2GQ{
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -24,10 +25,12 @@ public class Projeto2GQ{
         labirinto.adicionarTesouro(new TokenDeAcesso(new int[]{1, 2}));
         labirinto.adicionarTesouro(new AtualizacaoDeSistema(new int[]{3, 3}));
         labirinto.adicionarTesouro(new FragmentoDeCodigo(new int[]{4, 1}));
-        
+        labirinto.adicionarTesouro(new VitoriaTesouro (new int[] {5, 4}));
+       
         // Adicionar perigos
         labirinto.adicionarPerigo(new BugCorrompido(new int[]{2, 2}));
         labirinto.adicionarPerigo(new SentinelaHostil(new int[]{3, 1}));
+        labirinto.adicionarPerigo(new GameOverPerigo(new int[] {5, 5}));
         
         // Criar jogador na posição [0, 0]
         Aventureiro jogador = new Aventureiro("ProgramaPrincipal", new int[]{0, 0});
