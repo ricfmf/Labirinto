@@ -43,6 +43,10 @@ public class Aventureiro {
         return pontos;
     }
 
+    public void adicionarPontos(int valor) {
+    this.pontos += valor;
+}
+
     /**
      * Move o jogador para uma nova posição da grade digital,
      * e interage com elementos se presentes.
