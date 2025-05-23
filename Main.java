@@ -1,16 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.projeto2gq;
+
 import java.util.Scanner;
 import java.util.Arrays;
-/**
- *
- * @author ricar
- */
 
-public class Projeto2GQ{
+import java.util.Scanner;
+        
+import java.util.Arrays;
+
+
+public class Projeto2GQ {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
@@ -25,12 +23,12 @@ public class Projeto2GQ{
         labirinto.adicionarTesouro(new TokenDeAcesso(new int[]{1, 2}));
         labirinto.adicionarTesouro(new AtualizacaoDeSistema(new int[]{3, 3}));
         labirinto.adicionarTesouro(new FragmentoDeCodigo(new int[]{4, 1}));
-        labirinto.adicionarTesouro(new VitoriaTesouro (new int[] {5, 4}));
+        labirinto.adicionarTesouro(new VitoriaTesouro(new int[]{5, 4}));
        
         // Adicionar perigos
         labirinto.adicionarPerigo(new BugCorrompido(new int[]{2, 2}));
         labirinto.adicionarPerigo(new SentinelaHostil(new int[]{3, 1}));
-        labirinto.adicionarPerigo(new GameOverPerigo(new int[] {5, 5}));
+        labirinto.adicionarPerigo(new GameOverPerigo(new int[]{5, 5}));
         
         // Criar jogador na posição [0, 0]
         Aventureiro jogador = new Aventureiro("ProgramaPrincipal", new int[]{0, 0});
@@ -93,35 +91,45 @@ public class Projeto2GQ{
                         jogando = false;
                         System.out.println("Saindo do Sistema Tron...");
                         continue;
+                    case "LOL":
+                        System.out.println("\n🌫️ Você ouviu passos suaves... algo se esconde nas sombras...");
+                        System.out.println("✨ TEEMO apareceu furtivamente no campo de batalha!");
+                        System.out.println("\"O escoteiro nunca recua!\" - Teemo");
+
+                        System.out.println("\n🧠 Teemo quer testar seus conhecimentos sobre League of Legends...");
+                        System.out.println("Pergunta: Qual é o nome verdadeiro do jogador conhecido como Faker?");
+                        System.out.println("A) Lee Sang-hyeok");
+                        System.out.println("B) Park Jae-sang");
+                        System.out.println("C) Kim Seon-woo");
+                        System.out.println("D) Ryu Sang-wook");
+                        System.out.print("Digite a letra da resposta correta: ");
+
+                        String resposta = scanner.nextLine().toUpperCase();
+
+                        if (resposta.equals("A")) {
+                            System.out.println("\n✅ Resposta correta!");
+                            System.out.println("Você ganhou um bônus secreto de 13 pontos por sabedoria lendária!");
+                            jogador.adicionarPontos(13);
+                        } else {
+                            System.out.println("\n❌ Resposta incorreta!");
+                            System.out.println("Teemo desapareceu nas sombras... nenhuma recompensa foi concedida.");
+                        }
+
+                    System.out.println("\nPressione ENTER para continuar...");
+                    scanner.nextLine();
+                    continue;
+
                     default:
                         System.out.println("Comando inválido! Tente novamente.");
                         Thread.sleep(1000);
                         continue;
                 }
                 
-                // Antes de mover, verifique se há tesouros ou perigos na nova posição
-                Tesouro tesouro = labirinto.getTesouroNaPosicao(novaPosicao);
-                Perigo perigo = labirinto.getPerigoNaPosicao(novaPosicao);
-                
-                if (tesouro != null) {
-                    System.out.println("\n🔍 Você avistou um " + tesouro.getNome() + " na próxima posição!");
-                    System.out.print("Deseja se mover para lá? (S/N): ");
-                    String resposta = scanner.nextLine().toUpperCase();
-                    if (!resposta.equals("S")) {
-                        continue;
-                    }
-                } else if (perigo != null) {
-                    System.out.println("\n⚠ ALERTA: Há um " + perigo.getNome() + " na próxima posição!");
-                    System.out.print("Deseja continuar mesmo assim? (S/N): ");
-                    String resposta = scanner.nextLine().toUpperCase();
-                    if (!resposta.equals("S")) {
-                        continue;
-                    }
-                }
-                
+                // Mover o jogador diretamente para a nova posição
                 jogador.mover(novaPosicao, labirinto);
                 
                 // Mostrar mensagem específica se coletou tesouro
+                Tesouro tesouro = labirinto.getTesouroNaPosicao(novaPosicao);
                 if (tesouro != null && Arrays.equals(jogador.getLocalizacaoAtual(), novaPosicao)) {
                     System.out.println("\n✅ " + tesouro.getNome() + " coletado com sucesso!");
                     System.out.println("Pontos: +" + tesouro.getValor());
