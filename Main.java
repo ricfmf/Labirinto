@@ -3,32 +3,28 @@ package com.mycompany.projeto2gq;
 import java.util.Scanner;
 import java.util.Arrays;
 
-// Imports were duplicated in the original, cleaned up
-// import java.util.Scanner;
-// import java.util.Arrays;
 
-
-public class Projeto2GQ { // Corrected class name to match file content
+public class Projeto2GQ { 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
         System.out.println("🌀 Bem-vindo ao SISTEMA TRON!");
         System.out.println("🔷 Iniciando simulação da Grade Digital...\n");
         
-        // Criar o labirinto 6x6
+
         Labirinto labirinto = new Labirinto();
         labirinto.gerarLabirinto(6, 6);
         
-        // Adicionar tesouros
+
         labirinto.adicionarTesouro(new TokenDeAcesso(new int[]{1, 2}));
         labirinto.adicionarTesouro(new AtualizacaoDeSistema(new int[]{3, 3}));
         labirinto.adicionarTesouro(new FragmentoDeCodigo(new int[]{4, 1}));
-        labirinto.adicionarTesouro(new VitoriaTesouro(new int[]{5, 4})); // This treasure also grants victory
+        labirinto.adicionarTesouro(new VitoriaTesouro(new int[]{5, 4})); 
        
         // Adicionar perigos
         labirinto.adicionarPerigo(new BugCorrompido(new int[]{2, 2}));
         labirinto.adicionarPerigo(new SentinelaHostil(new int[]{3, 1}));
-        labirinto.adicionarPerigo(new GameOverPerigo(new int[]{5, 5})); // This danger causes game over
+        labirinto.adicionarPerigo(new GameOverPerigo(new int[]{5, 5})); 
         
         // Criar jogador na posição [0, 0]
         Aventureiro jogador = new Aventureiro("ProgramaPrincipal", new int[]{0, 0}); //
@@ -85,17 +81,17 @@ public class Projeto2GQ { // Corrected class name to match file content
                         jogador.mostrarInventario(); //
                         System.out.println("\nPressione ENTER para continuar...");
                         scanner.nextLine();
-                        continue; // Skip point check for this iteration
+                        continue;
                     case "M":
                         System.out.println("\n=== MAPA COMPLETO ===");
                         exibirLabirintoComJogador(labirinto, jogador);
                         System.out.println("\nPressione ENTER para continuar...");
                         scanner.nextLine();
-                        continue; // Skip point check for this iteration
+                        continue;
                     case "Q":
                         jogando = false;
                         System.out.println("Saindo do Sistema Tron...");
-                        continue; // Skip point check and end game
+                        continue;
                     case "LOL":
                         System.out.println("\n🌫️ Você ouviu passos suaves... algo se esconde nas sombras...");
                         System.out.println("✨ TEEMO apareceu furtivamente no campo de batalha!");
@@ -122,39 +118,35 @@ public class Projeto2GQ { // Corrected class name to match file content
 
                         System.out.println("\nPressione ENTER para continuar...");
                         scanner.nextLine();
-                        // Do not 'continue', fall through to allow victory check after adding points
+
                         break; 
                     default:
                         System.out.println("Comando inválido! Tente novamente.");
-                        Thread.sleep(1000); // Original behavior
-                        continue; // Skip point check for this iteration
+                        Thread.sleep(1000); 
+                        continue;
                 }
                 
                 if (performMove) {
-                    jogador.mover(novaPosicao, labirinto); // This might trigger System.exit() via VitoriaTesouro or GameOverPerigo
+                    jogador.mover(novaPosicao, labirinto); 
                 }
                 
-                // The original code had a redundant message display here for collected treasures.
-                // The Aventureiro.coletarTesouro method already handles these messages.
+
                 
             } catch (IllegalArgumentException e) {
                 System.out.println("Erro: " + e.getMessage());
-                // Consider adding a "Press ENTER to continue..." here for better UX
-                // System.out.println("\nPressione ENTER para continuar...");
-                // scanner.nextLine();
-            } catch (InterruptedException e) { // For Thread.sleep in default case
+
+            } catch (InterruptedException e) { 
                 Thread.currentThread().interrupt();
             }
 
-            // Check for 40-point victory condition, if the game hasn't already ended
-            // by VitoriaTesouro, GameOverPerigo, or the 'Q' command.
+
             if (jogando && jogador.getPontos() >= 40) {
                 // Limpar a tela (simulado)
                 for (int i = 0; i < 50; i++) System.out.println();
             
                 System.out.println("🎉🎉🎉 VOCÊ ATINGIU 40 PONTOS OU MAIS! 🎉🎉🎉");
                 System.out.println("Você demonstrou grande habilidade e venceu o desafio da Rede Tron!");
-                jogando = false; // Set to false to exit the loop and show final score
+                jogando = false; 
             }
         }
         
@@ -187,9 +179,9 @@ public class Projeto2GQ { // Corrected class name to match file content
                         } else if (tesouro instanceof FragmentoDeCodigo) { //
                              System.out.print("F ");
                         } else if (tesouro instanceof VitoriaTesouro) { //
-                             System.out.print("V "); // Added a 'V' for VitoriaTesouro for clarity on map
+                             System.out.print("V "); 
                         } else {
-                             System.out.print("⚡ "); // Generic treasure from original Labirinto.exibirLabirinto()
+                             System.out.print("⚡ "); 
                         }
                     } else if (perigo != null) {
                         if (perigo instanceof BugCorrompido) { //
@@ -197,12 +189,12 @@ public class Projeto2GQ { // Corrected class name to match file content
                         } else if (perigo instanceof SentinelaHostil) { //
                             System.out.print("S ");
                         } else if (perigo instanceof GameOverPerigo) { //
-                            System.out.print("X "); // Added 'X' for GameOverPerigo for clarity
+                            System.out.print("X "); 
                         } else {
-                            System.out.print("☠ "); // Generic danger from original Labirinto.exibirLabirinto()
+                            System.out.print("☠ "); 
                         }
                     } else {
-                        System.out.print("░ "); // Empty space
+                        System.out.print("░ "); 
                     }
                 }
             }
